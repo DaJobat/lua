@@ -5,6 +5,8 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
     const liblua = buildLibLua(b, target, optimize);
 
+    b.installArtifact(liblua);
+
     const exe = b.addExecutable(.{
         .name = "lua",
         .target = target,
@@ -13,11 +15,10 @@ pub fn build(b: *std.Build) void {
     exe.linkLibC();
     exe.linkLibrary(liblua);
     exe.addCSourceFile("lua.c", &.{});
-    b.installArtifact(exe);
 
-    var lib_step = b.step("lib", "emit liblua.a");
-    var emit_liblua = b.addInstallArtifact(liblua);
-    lib_step.dependOn(&emit_liblua.step);
+    var exe_step = b.step("exe", "emit lua executable");
+    var emit_exe = b.addInstallArtifact(exe);
+    exe_step.dependOn(&emit_exe.step);
 }
 
 pub fn buildLibLua(b: *std.Build, target: std.zig.CrossTarget, optimize: std.builtin.OptimizeMode) *std.Build.CompileStep {
