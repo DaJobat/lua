@@ -36,7 +36,13 @@ pub fn buildLibLua(b: *std.Build, target: std.zig.CrossTarget, optimize: std.bui
     }
 
     lua.linkLibC();
-    lua.addIncludePath(".");
+    var dir = std.fs.cwd().openIterableDir(".", .{ .access_sub_paths = false }) catch unreachable;
+    var it = dir.iterate();
+    while (it.next() catch null) |entry| {
+        if (std.mem.endsWith(u8, entry.name, ".h")) {
+            lua.installHeader(entry.name, entry.name);
+        }
+    }
 
     return lua;
 }
