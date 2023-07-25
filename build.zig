@@ -23,7 +23,7 @@ pub fn build(b: *std.Build) void {
 
 pub fn buildLibLua(b: *std.Build, target: std.zig.CrossTarget, optimize: std.builtin.OptimizeMode) *std.Build.CompileStep {
     const lua = b.addStaticLibrary(.{
-        .name = "lua",
+        .name = "liblua",
         .target = target,
         .optimize = optimize,
     });
