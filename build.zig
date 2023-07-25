@@ -36,6 +36,9 @@ pub fn buildLibLua(b: *std.Build, target: std.zig.CrossTarget, optimize: std.bui
     }
 
     lua.linkLibC();
+    lua.installHeader("lua.h", "lua.h");
+    lua.installHeader("lualib.h", "lua.h");
+    lua.installHeader("luaaux.h", "lua.h");
 
     return lua;
 }
